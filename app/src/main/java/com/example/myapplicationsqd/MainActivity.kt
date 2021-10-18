@@ -4,10 +4,12 @@ import android.app.DownloadManager
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,12 +27,11 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("Range")
     fun downloadImage(url: String) {
         val directory = File(Environment.DIRECTORY_PICTURES)
-
         if (!directory.exists()) {
             directory.mkdirs()
         }
         val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-
+        //Environment.getStorageDirectory()
         val downloadUri = Uri.parse(url)
 
         val request = DownloadManager.Request(downloadUri).apply {
@@ -40,7 +41,8 @@ class MainActivity : AppCompatActivity() {
                 .setDescription("")
                 .setDestinationInExternalPublicDir(
                     directory.toString(),
-                    url.substring(url.lastIndexOf("/") + 1)
+                    File.separator + "MemeCreator" + File.separator + url.substring(url.lastIndexOf("/") + 1)
+                    //url.substring(url.lastIndexOf("/") + 1)
                 )
         }
 
@@ -67,7 +69,6 @@ class MainActivity : AppCompatActivity() {
         }).start()
     }
     private fun statusMessage(url: String, directory: File, status: Int): String? {
-        var msg = ""
         msg = when (status) {
             DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
             DownloadManager.STATUS_PAUSED -> "Paused"
