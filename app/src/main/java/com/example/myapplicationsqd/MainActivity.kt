@@ -4,15 +4,14 @@ import android.app.DownloadManager
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import java.io.File
 import java.util.*
 
@@ -20,6 +19,7 @@ import java.util.*
 class MainActivity : AppCompatActivity() {
     var ImgUrls: ArrayList<String> = ArrayList()
     var recyclerView: RecyclerView? = null
+    var refreshView: SwipeRefreshLayout? = null
     var Manager: LinearLayoutManager? = null
     var adapter: DataAdapter? = null
     var msg: String? = ""
@@ -87,15 +87,14 @@ class MainActivity : AppCompatActivity() {
         //creer_Json_local(ImgUrls);
         //creer_Json_extern(ImgUrls);
         ImgUrls.add("https://images.pexels.com/photos/2220401/pexels-photo-2220401.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350")
-        ImgUrls.add("https://images.pexels.com/photos/2765586/pexels-photo-2765586.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=350")
-        ImgUrls.add("https://i.imgur.com/DulGEc5_d.jpg")
-        ImgUrls.add("https://i.imgur.com/rXkffMg_d.jpg")
         val sizeArray=ImgUrls.size
-        for (i in 0 until sizeArray-1)
-        {
-            downloadImage(ImgUrls[i])
-        }
-
+        downloadImage(ImgUrls[0])
+        //for (i in 0 until sizeArray)
+        //{
+        //downloadImage(ImgUrls[i])
+        //}
+        refreshView= findViewById<SwipeRefreshLayout>(R.id.swipeRefresh)
+        //refreshView.setOnRefreshListener(MemeRequest(applicationContext, this))
         recyclerView = findViewById<View>(R.id.card_recycler_view) as RecyclerView
         Manager = LinearLayoutManager(this)
         recyclerView!!.layoutManager = Manager
