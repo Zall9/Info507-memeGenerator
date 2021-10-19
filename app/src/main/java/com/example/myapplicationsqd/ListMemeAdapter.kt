@@ -9,24 +9,28 @@ import androidx.recyclerview.widget.RecyclerView
 import org.w3c.dom.Text
 import java.util.*
 
-class ListAdapter (
+class ListMemeAdapter (
     private val context: Context,
-    private val ImgUrls: ArrayList<String>
+    private val Listmeme: ArrayList<String>
 ) :
-    RecyclerView.Adapter<ListAdapter.ViewHolder>() {
-    override fun onCreateViewHolder(viewGroup: ViewGroup, i: Int): ViewHolder {
-        val view = LayoutInflater.from(viewGroup.context)
-            .inflate(R.layout.list_row_layout, viewGroup, false)
-        return ViewHolder(view)
+    RecyclerView.Adapter<ListMemeAdapter.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            LayoutInflater.from(context).inflate(
+                R.layout.list_row_layout,
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-        holder.txt_android.text= ImgUrls.get(i)
+        holder.txt_android.text= "Meme: " + Listmeme.get(i).toString()
 
     }
 
     override fun getItemCount(): Int {
-        return ImgUrls.size
+        return Listmeme.size
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -39,4 +43,7 @@ class ListAdapter (
         }
     }
 
+}
+class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    val txt_android = view.findViewById<TextView>(R.id.txt_android)
 }

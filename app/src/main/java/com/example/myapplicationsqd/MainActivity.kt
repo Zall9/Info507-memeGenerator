@@ -19,12 +19,11 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
     var textBottom: EditText?=null
     var textUp: EditText?=null
-
     var ImgUrls: ArrayList<String> = ArrayList()
     var Listmeme: ArrayList<String> = ArrayList()
     var recyclerViewListMeme: RecyclerView? = null
     var managerViewListMeme: LinearLayoutManager?=null
-    var adapterViewListMeme: DataAdapter?=null
+    var adapterViewListMeme: ListMemeAdapter?=null
     var recyclerView: RecyclerView? = null
     var bouttonGenerer: Button?=null
     var showMemeListButton: Button?=null
@@ -125,8 +124,10 @@ class MainActivity : AppCompatActivity() {
         }
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
         managerViewListMeme= LinearLayoutManager(this)
-        adapterViewListMeme= DataAdapter(this,Listmeme)
         recyclerViewListMeme!!.layoutManager=managerViewListMeme
+        adapterViewListMeme= ListMemeAdapter(this,Listmeme)
+        recyclerViewListMeme!!.adapter = adapterViewListMeme
+
         recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
         Manager = LinearLayoutManager(this)
         recyclerView!!.layoutManager = Manager
