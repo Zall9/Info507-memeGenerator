@@ -25,7 +25,7 @@ class ListMemeAdapter (
     }
 
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-        holder.txt_android.text= "Meme: " + Listmeme.get(i).toString()
+        holder.txt_android.text= Listmeme.get(i).toString()
 
     }
 

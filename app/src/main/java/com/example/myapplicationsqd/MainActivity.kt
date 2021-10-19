@@ -115,19 +115,16 @@ class MainActivity : AppCompatActivity() {
         }*/
         ImgUrls.add("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
         bouttonGenerer!!.setOnClickListener{
-
-
-
-            //val sizeArray=ImgUrls.size
-            //downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
-
+            downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
         }
+        //Reycler View de la liste des memes a selectionner
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
         managerViewListMeme= LinearLayoutManager(this)
         recyclerViewListMeme!!.layoutManager=managerViewListMeme
         adapterViewListMeme= ListMemeAdapter(this,Listmeme)
         recyclerViewListMeme!!.adapter = adapterViewListMeme
 
+        //RecyclerView qui affiche le meme selectionné
         recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
         Manager = LinearLayoutManager(this)
         recyclerView!!.layoutManager = Manager
