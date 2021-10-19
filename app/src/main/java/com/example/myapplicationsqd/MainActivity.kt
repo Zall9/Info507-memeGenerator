@@ -15,8 +15,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import java.util.*
 import java.io.File
+import android.widget.RelativeLayout
+
+
+
+
+
 
 class MainActivity : AppCompatActivity() {
+    var afficherMeme:Boolean=false
     var textBottom: EditText?=null
     var textUp: EditText?=null
     var ImgUrls: ArrayList<String> = ArrayList()
@@ -31,6 +38,7 @@ class MainActivity : AppCompatActivity() {
     var adapter: DataAdapter? = null
     var msg: String? = ""
     var lastMsg = ""
+    var list_row_layout: RelativeLayout?=null
     var showOrHideButton: Button?=null
     fun generateName() :String{
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
@@ -98,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         }
         return msg
     }
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -112,10 +121,9 @@ class MainActivity : AppCompatActivity() {
         var textHaut= textUp!!.text
         var textBas= textBottom!!.text
 
-    /*    showMemeListButton!!.setOnClickListener{
-            recyclerViewListMeme!!.setVisibility(View.VISIBLE)
-        }*/
+
         ImgUrls.add("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
+
         bouttonGenerer!!.setOnClickListener{
             downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
         }
@@ -126,6 +134,13 @@ class MainActivity : AppCompatActivity() {
             else
                 recyclerViewListMeme!!.visibility= View.VISIBLE
         }
+        list_row_layout = findViewById<RelativeLayout>(R.id.list_row_layout)
+/*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+        /*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+        //listener sur le recyclerView de listMeme ici stp
+
+        /*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+/*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
         //Reycler View de la liste des memes a selectionner
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
         managerViewListMeme= LinearLayoutManager(this)
@@ -134,11 +149,12 @@ class MainActivity : AppCompatActivity() {
         recyclerViewListMeme!!.adapter = adapterViewListMeme
 
         //RecyclerView qui affiche le meme selectionné
-        recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
-        Manager = LinearLayoutManager(this)
-        recyclerView!!.layoutManager = Manager
-        adapter = DataAdapter(this,ImgUrls)
-        recyclerView!!.adapter = adapter
-
+        if (afficherMeme==true){
+            recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
+            Manager = LinearLayoutManager(this)
+            recyclerView!!.layoutManager = Manager
+            adapter = DataAdapter(this,ImgUrls)
+            recyclerView!!.adapter = adapter
+        }
     }
 }
