@@ -13,17 +13,20 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical">
                 <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listOfPictures"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 ></androidx.recyclerview.widget.RecyclerView>
             <Button
                 android:id="@+id/ButtonShowListOfMeme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintLeft_toRightOf="@id/listOfPictures"></Button>
+                android:text="Choose a meme"
+                app:layout_constraintLeft_toRightOf="@id/listOfPictures"
+                android:layout_marginLeft="150dp"></Button>
         </LinearLayout>
 
 

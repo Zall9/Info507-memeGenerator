@@ -31,6 +31,7 @@ class MainActivity : AppCompatActivity() {
     var adapter: DataAdapter? = null
     var msg: String? = ""
     var lastMsg = ""
+    var showOrHideButton: Button?=null
     fun generateName() :String{
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         val randomString = (1..15)
@@ -102,6 +103,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         bouttonGenerer= findViewById<Button>(R.id.bouttonSent)
+        showMemeListButton= findViewById<Button>(R.id.ButtonShowListOfMeme)
         textUp= findViewById<EditText>(R.id.textUp)
         textBottom= findViewById<EditText>(R.id.textDown)
 
@@ -116,6 +118,13 @@ class MainActivity : AppCompatActivity() {
         ImgUrls.add("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
         bouttonGenerer!!.setOnClickListener{
             downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
+        }
+        showMemeListButton!!.setOnClickListener {
+            if (recyclerViewListMeme!!.visibility==View.VISIBLE){
+                recyclerViewListMeme!!.visibility= View.GONE
+            }
+            else
+                recyclerViewListMeme!!.visibility= View.VISIBLE
         }
         //Reycler View de la liste des memes a selectionner
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
