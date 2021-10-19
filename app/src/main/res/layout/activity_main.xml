@@ -3,19 +3,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
+   <androidx.constraintlayout.widget.ConstraintLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/ButtonShowListOfMeme"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
+            app:layout_constraintLeft_toRightOf="@id/listOfPictures"></Button>
+
+       <androidx.recyclerview.widget.RecyclerView
+           android:id="@+id/listOfPictures"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+
+           app:layout_constraintBaseline_toBottomOf="parent"
+           app:layout_constraintBottom_toBottomOf="parent"></androidx.recyclerview.widget.RecyclerView>
+   </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
     <EditText
+        android:id="@+id/textUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="Texte en haut de l'image"
@@ -25,14 +40,23 @@
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/card_recycler_view"
+        android:id="@+id/card_current_recycler_view"
         android:scrollbars="vertical"
-
-        />
+        ></androidx.recyclerview.widget.RecyclerView>
     <EditText
+        android:id="@+id/textDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
         android:hint="Texte en bas de l'image"></EditText>
+
+        <Button
+            android:id="@+id/bouttonSent"
+            android:text="Generate"
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:layout_marginLeft="135dp"
+            ></Button>
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
