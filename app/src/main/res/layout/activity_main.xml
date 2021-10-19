@@ -6,29 +6,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fitsSystemWindows="true"
     tools:context=".MainActivity">
-   <androidx.constraintlayout.widget.ConstraintLayout
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/ButtonShowListOfMeme"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            app:layout_constraintLeft_toRightOf="@id/listOfPictures"></Button>
-
-       <androidx.recyclerview.widget.RecyclerView
-           android:id="@+id/listOfPictures"
-           android:layout_width="wrap_content"
-           android:layout_height="wrap_content"
-           app:layout_constraintBottom_creator="@android:integer/config_longAnimTime"
-           app:layout_constraintBaseline_toBottomOf="parent"
-           app:layout_constraintBottom_toBottomOf="parent"></androidx.recyclerview.widget.RecyclerView>
-   </androidx.constraintlayout.widget.ConstraintLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/listOfPictures"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                ></androidx.recyclerview.widget.RecyclerView>
+            <Button
+                android:id="@+id/ButtonShowListOfMeme"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintLeft_toRightOf="@id/listOfPictures"></Button>
+        </LinearLayout>
+
+
     <EditText
         android:id="@+id/textUp"
         android:layout_width="wrap_content"
