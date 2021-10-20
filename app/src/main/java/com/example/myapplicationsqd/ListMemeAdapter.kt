@@ -18,6 +18,11 @@ class ListMemeAdapter (
 ) :
     RecyclerView.Adapter<ListMemeAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        LayoutInflater.from(context).inflate(
+            R.layout.list_row_layout,
+            parent,
+            false
+        ).setOnClickListener()
         return ViewHolder(
             LayoutInflater.from(context).inflate(
                 R.layout.list_row_layout,
