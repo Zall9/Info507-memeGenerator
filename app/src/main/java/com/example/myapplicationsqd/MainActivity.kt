@@ -21,7 +21,6 @@ import android.widget.RelativeLayout
 
 
 
-
 class MainActivity : AppCompatActivity() {
     var afficherMeme:Boolean=false
     var textBottom: EditText?=null
@@ -39,7 +38,7 @@ class MainActivity : AppCompatActivity() {
     var msg: String? = ""
     var lastMsg = ""
     var list_row_layout: RelativeLayout?=null
-    var showOrHideButton: Button?=null
+
     fun generateName() :String{
         val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
         val randomString = (1..15)
@@ -134,13 +133,8 @@ class MainActivity : AppCompatActivity() {
             else
                 recyclerViewListMeme!!.visibility= View.VISIBLE
         }
-        list_row_layout = findViewById<RelativeLayout>(R.id.list_row_layout)
-/*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
-        /*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
-        //listener sur le recyclerView de listMeme ici stp
 
-        /*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
-/*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
+
         //Reycler View de la liste des memes a selectionner
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
         managerViewListMeme= LinearLayoutManager(this)
