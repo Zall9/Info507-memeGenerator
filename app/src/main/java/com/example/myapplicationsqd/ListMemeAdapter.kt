@@ -12,6 +12,9 @@ import java.util.*
 class ListMemeAdapter (
     private val context: Context,
     private val Listmeme: ArrayList<String>
+    /*sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss*/
+    private val listOfPictures: ArrayList<item>
+    /*sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss*/
 ) :
     RecyclerView.Adapter<ListMemeAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,11 +26,23 @@ class ListMemeAdapter (
             )
         )
     }
-
+    /*sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss*/
+    /*retourne l'indice de l'image cliquer*/
+    override fun getItemNb(): Int {
+        return listOfPictures.count()
+    }
+    /*sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss*/
+    /*set images clikable*/
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
         holder.txt_android.text= Listmeme.get(i).toString()
-
+    /*sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss*/
+        val data = Listmeme[getItemNb()]
+        holder.img.setImageDrawable(ContextCompat.getDrawable(context, data))
+        holder.itemView.setOnClickListener {
+            cellClickListener.onCellClickListener(data)
+        }
     }
+    /*sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss*/
 
     override fun getItemCount(): Int {
         return Listmeme.size
@@ -36,6 +51,7 @@ class ListMemeAdapter (
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var txt_android: TextView
+        val img: ImageView = view.findViewById(R.id.img)
 
         init {
             txt_android =
