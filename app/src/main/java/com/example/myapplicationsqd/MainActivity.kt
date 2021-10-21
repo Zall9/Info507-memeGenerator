@@ -7,22 +7,16 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import java.util.*
 import java.io.File
-import android.widget.RelativeLayout
-
-
-
 
 
 class MainActivity : AppCompatActivity() {
-    var afficherMeme:Boolean=false
     var textBottom: EditText?=null
     var textUp: EditText?=null
     var ImgUrls: ArrayList<String> = ArrayList()
@@ -107,9 +101,10 @@ class MainActivity : AppCompatActivity() {
     }
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         bouttonGenerer= findViewById<Button>(R.id.bouttonSent)
         showMemeListButton= findViewById<Button>(R.id.ButtonShowListOfMeme)
         textUp= findViewById<EditText>(R.id.textUp)
@@ -122,6 +117,7 @@ class MainActivity : AppCompatActivity() {
 
 
         ImgUrls.add("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
+        ImgUrls.add("https://apimeme.com/meme?meme=1990s-First-World-Problems&top=Top+text&bottom=Bottom+text")
 
         bouttonGenerer!!.setOnClickListener{
             downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
@@ -134,21 +130,30 @@ class MainActivity : AppCompatActivity() {
                 recyclerViewListMeme!!.visibility= View.VISIBLE
         }
 
-
         //Reycler View de la liste des memes a selectionner
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
         managerViewListMeme= LinearLayoutManager(this)
         recyclerViewListMeme!!.layoutManager=managerViewListMeme
-        adapterViewListMeme= ListMemeAdapter(this,Listmeme)
-        recyclerViewListMeme!!.adapter = adapterViewListMeme
+        adapterViewListMeme= object : ListMemeAdapter(applicationContext, Listmeme) {
+            override fun onItemClick(view: View): Boolean {
+                val memeSelected=Listmeme.get(recyclerViewListMeme!!.getChildViewHolder(view).adapterPosition)
+
+                Toast.makeText(applicationContext, "$memeSelected", Toast.LENGTH_LONG).show()
+                recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
+                Manager = LinearLayoutManager(applicationContext)
+                recyclerView!!.layoutManager = Manager
+                adapter = DataAdapter(applicationContext,ImgUrls)
+                recyclerView!!.adapter = adapter
+                recyclerViewListMeme!!.adapter = adapterViewListMeme
+                return true
+                                                        }
+            }
+
+
+
+
 
         //RecyclerView qui affiche le meme selectionné
-        if (afficherMeme==true){
-            recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
-            Manager = LinearLayoutManager(this)
-            recyclerView!!.layoutManager = Manager
-            adapter = DataAdapter(this,ImgUrls)
-            recyclerView!!.adapter = adapter
-        }
+
     }
 }

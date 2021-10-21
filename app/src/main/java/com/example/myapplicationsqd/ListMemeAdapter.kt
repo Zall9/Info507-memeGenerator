@@ -1,54 +1,45 @@
 package com.example.myapplicationsqd
+
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import org.w3c.dom.Text
 import java.util.*
 
-class ListMemeAdapter (
+abstract class ListMemeAdapter(
     private val context: Context,
     private val Listmeme: ArrayList<String>
 ) :
     RecyclerView.Adapter<ListMemeAdapter.ViewHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        LayoutInflater.from(context).inflate(
-            R.layout.list_row_layout,
-            parent,
-            false
-        ).setOnClickListener()
-        return ViewHolder(
-            LayoutInflater.from(context).inflate(
-                R.layout.list_row_layout,
-                parent,
-                false
-            )
-        )
+        val view = LayoutInflater.from(context).inflate(R.layout.list_row_layout, parent, false)
+        view.setOnClickListener { view -> onItemClick(view) }
+        return ViewHolder(view)
     }
 
+    abstract fun onItemClick(view: View): Boolean
+
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
-        holder.txt_android.text= Listmeme.get(i).toString()
+        holder.txtAndroid.text = Listmeme.get(i).toString()
 
     }
 
     override fun getItemCount(): Int {
         return Listmeme.size
     }
-
+    fun getId(i:Int):String{
+        return Listmeme.get(i)
+    }
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-        var txt_android: TextView
+        var txtAndroid: TextView
 
         init {
-            txt_android =
-                view.findViewById<View>(R.id.txt_android) as TextView
+            txtAndroid = view.findViewById<TextView>(R.id.txt_android)
         }
     }
 
-}
-class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-    val txt_android = view.findViewById<TextView>(R.id.txt_android)
 }
