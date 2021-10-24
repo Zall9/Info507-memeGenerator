@@ -17,6 +17,7 @@ import java.io.File
 
 
 class MainActivity : AppCompatActivity() {
+    lateinit var imageViews: ImageView
     var textBottom: EditText?=null
     var textUp: EditText?=null
     var ImgUrls: ArrayList<String> = ArrayList()
@@ -116,8 +117,8 @@ class MainActivity : AppCompatActivity() {
         var textBas= textBottom!!.text
 
 
-        ImgUrls.add("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
-        ImgUrls.add("https://apimeme.com/meme?meme=1990s-First-World-Problems&top=Top+text&bottom=Bottom+text")
+
+
 
         bouttonGenerer!!.setOnClickListener{
             downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
@@ -134,21 +135,25 @@ class MainActivity : AppCompatActivity() {
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
         managerViewListMeme= LinearLayoutManager(this)
         recyclerViewListMeme!!.layoutManager=managerViewListMeme
+        imageViews= findViewById<ImageView>(R.id.card_current_image_view)
         adapterViewListMeme= object : ListMemeAdapter(applicationContext, Listmeme) {
             override fun onItemClick(view: View): Boolean {
                 val memeSelected=Listmeme.get(recyclerViewListMeme!!.getChildViewHolder(view).adapterPosition)
+                Picasso.with(applicationContext).load("$memeSelected").resize(600, 600).into(imageViews)
+
+
 
                 Toast.makeText(applicationContext, "$memeSelected", Toast.LENGTH_LONG).show()
-                recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
-                Manager = LinearLayoutManager(applicationContext)
-                recyclerView!!.layoutManager = Manager
-                adapter = DataAdapter(applicationContext,ImgUrls)
-                recyclerView!!.adapter = adapter
-                recyclerViewListMeme!!.adapter = adapterViewListMeme
+//                recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
+  //              Manager = LinearLayoutManager(applicationContext)
+    //            recyclerView!!.layoutManager = Manager
+      //          adapter = DataAdapter(applicationContext,ImgUrls)
+        //        recyclerView!!.adapter = adapter
+
                 return true
                                                         }
             }
-
+        recyclerViewListMeme!!.adapter = adapterViewListMeme
 
 
 
