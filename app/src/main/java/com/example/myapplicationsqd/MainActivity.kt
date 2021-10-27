@@ -50,6 +50,7 @@ class MainActivity : AppCompatActivity() {
             .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
             .map(charPool::get)
             .joinToString("");
+        println(randomString + ".jpg")
         return randomString + ".jpg"
     }
     @SuppressLint("Range")
@@ -118,7 +119,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         requestQueue = Volley.newRequestQueue(this)
 
-
+        val API_URL = "http://apimeme.com/meme?meme=%s&top=%s&bottom=%s"
 
 
 
@@ -129,11 +130,6 @@ class MainActivity : AppCompatActivity() {
 
         var textHaut= toptext!!.text
         var textBas= bottomtext!!.text
-
-
-
-
-
 
         showMemeListButton!!.setOnClickListener {
             jsonParse()
@@ -158,13 +154,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 //val list : ArrayList<String> = Listmeme.values as ArrayList<String>
                 val memeSelected=list.get(recyclerViewListMeme!!.getChildViewHolder(view).adapterPosition)
-                Picasso.with(applicationContext).load("$memeSelected").resize(600, 600).into(imageViews)
+                Picasso.with(applicationContext).load(API_URL.format(memeSelected, "TOP", "BOTTOM")).resize(600, 600).into(imageViews)
                 bouttonGenerer!!.setOnClickListener{
                     var listurl : ArrayList<String> = arrayListOf()
                     for ((key, value) in Listmeme){
                         listurl.add(key)
                     }
-                    downloadImage(memeSelected.format(toptext,bottomtext))
+                    downloadImage(API_URL.format(memeSelected, textHaut, textBas))
                 }
 
 
