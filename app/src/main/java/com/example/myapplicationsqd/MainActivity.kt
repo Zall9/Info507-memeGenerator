@@ -6,22 +6,31 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
+import org.json.JSONException
 import java.util.*
 import java.io.File
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class MainActivity : AppCompatActivity() {
     lateinit var imageViews: ImageView
-    var textBottom: EditText?=null
-    var textUp: EditText?=null
+    lateinit var memeSelected: String
+    var toptext: EditText?=null
+    var bottomtext: EditText?=null
     var ImgUrls: ArrayList<String> = ArrayList()
-    var Listmeme: ArrayList<String> = ArrayList()
+    var Listmeme: HashMap<String,String> = hashMapOf()
     var recyclerViewListMeme: RecyclerView? = null
     var managerViewListMeme: LinearLayoutManager?=null
     var adapterViewListMeme: ListMemeAdapter?=null
@@ -32,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     var adapter: DataAdapter? = null
     var msg: String? = ""
     var lastMsg = ""
+    var requestQueue: RequestQueue? = null
     var list_row_layout: RelativeLayout?=null
 
     fun generateName() :String{
@@ -106,24 +116,28 @@ class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        requestQueue = Volley.newRequestQueue(this)
+
+
+
+
+
         bouttonGenerer= findViewById<Button>(R.id.bouttonSent)
         showMemeListButton= findViewById<Button>(R.id.ButtonShowListOfMeme)
-        textUp= findViewById<EditText>(R.id.textUp)
-        textBottom= findViewById<EditText>(R.id.textDown)
+        toptext= findViewById<EditText>(R.id.textUp)
+        bottomtext= findViewById<EditText>(R.id.textDown)
 
-        Listmeme.add("https://apimeme.com/meme?meme=10-Guy&top=Top+text&bottom=Bottom+text")
-        Listmeme.add("https://apimeme.com/meme?meme=1990s-First-World-Problems&top=Top+text&bottom=Bottom+text")
-        var textHaut= textUp!!.text
-        var textBas= textBottom!!.text
+        var textHaut= toptext!!.text
+        var textBas= bottomtext!!.text
 
 
 
 
 
-        bouttonGenerer!!.setOnClickListener{
-            downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
-        }
+
         showMemeListButton!!.setOnClickListener {
+            jsonParse()
+
             if (recyclerViewListMeme!!.visibility==View.VISIBLE){
                 recyclerViewListMeme!!.visibility= View.GONE
             }
@@ -138,9 +152,20 @@ class MainActivity : AppCompatActivity() {
         imageViews= findViewById<ImageView>(R.id.card_current_image_view)
         adapterViewListMeme= object : ListMemeAdapter(applicationContext, Listmeme) {
             override fun onItemClick(view: View): Boolean {
-                val memeSelected=Listmeme.get(recyclerViewListMeme!!.getChildViewHolder(view).adapterPosition)
+                var list : ArrayList<String> = arrayListOf()
+                for ((key, value) in Listmeme){
+                    list.add(value)
+                }
+                //val list : ArrayList<String> = Listmeme.values as ArrayList<String>
+                val memeSelected=list.get(recyclerViewListMeme!!.getChildViewHolder(view).adapterPosition)
                 Picasso.with(applicationContext).load("$memeSelected").resize(600, 600).into(imageViews)
-
+                bouttonGenerer!!.setOnClickListener{
+                    var listurl : ArrayList<String> = arrayListOf()
+                    for ((key, value) in Listmeme){
+                        listurl.add(key)
+                    }
+                    downloadImage(memeSelected.format(toptext,bottomtext))
+                }
 
 
                 Toast.makeText(applicationContext, "$memeSelected", Toast.LENGTH_LONG).show()
@@ -149,7 +174,7 @@ class MainActivity : AppCompatActivity() {
     //            recyclerView!!.layoutManager = Manager
       //          adapter = DataAdapter(applicationContext,ImgUrls)
         //        recyclerView!!.adapter = adapter
-
+                recyclerViewListMeme!!.visibility= View.GONE
                 return true
                                                         }
             }
@@ -160,5 +185,28 @@ class MainActivity : AppCompatActivity() {
 
         //RecyclerView qui affiche le meme selectionné
 
+    }
+
+    private fun jsonParse() {
+        val url = "http://os-vps418.infomaniak.ch:1186/i507_1_2/listmeme.json"
+        val request = JsonObjectRequest(Request.Method.GET, url, null,
+            { response ->
+                try {
+                    val iter = response.keys()
+                    while (iter.hasNext()) {
+                        val key = iter.next()
+                        try {
+                            val value = response.get(key) as String
+                            Listmeme[key] = value
+                            Log.d("tablo", "$key")
+                        } catch (e: JSONException){
+                            e.printStackTrace()
+                        }
+                    }
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
+            }, { error -> error.printStackTrace() })
+        requestQueue?.add(request)
     }
 }
