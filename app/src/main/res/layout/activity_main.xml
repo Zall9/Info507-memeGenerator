@@ -58,12 +58,7 @@
             android:layout_marginLeft="100dp"
             android:theme="@style/Theme.memegenerator"
             android:hint="Texte en bas de l'image"></EditText>
-        <ImageButton
-            android:id="@+id/shareButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="300dp"
-            android:background="@drawable/ic_baseline_share_24"></ImageButton>
+
         <Button
             android:id="@+id/bouttonSent"
             android:text="Generate"
