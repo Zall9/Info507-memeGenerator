@@ -27,6 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="Choose a meme"
                 app:layout_constraintLeft_toRightOf="@id/listOfPictures"
+                android:theme="@style/theme.memegenerator"
                 android:layout_marginLeft="150dp"></Button>
         </LinearLayout>
 
@@ -38,6 +39,7 @@
         android:hint="Texte en haut de l'image"
         android:layout_marginLeft="100dp"
         android:layout_marginTop="50dp"
+        android:theme="@style/theme.memegenerator"
         ></EditText>
 
         <ImageView
@@ -50,6 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="100dp"
+        android:theme="@style/theme.memegenerator"
         android:hint="Texte en bas de l'image"></EditText>
 
         <Button
@@ -58,6 +61,7 @@
             android:layout_width="120dp"
             android:layout_height="45dp"
             android:layout_marginLeft="135dp"
+            android:theme="@style/theme.memegenerator"
             ></Button>
     </LinearLayout>
 
