@@ -1,8 +1,10 @@
 package com.example.myapplicationsqd
 import android.annotation.SuppressLint
+import android.app.Application
 import android.app.DownloadManager
 import android.content.Context
 import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -18,15 +20,23 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.squareup.picasso.Picasso
 import org.json.JSONException
+import java.io.ByteArrayOutputStream
 import java.util.*
 import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
+import android.graphics.drawable.BitmapDrawable
+import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.toBitmap
 
 
 class MainActivity : AppCompatActivity() {
     lateinit var imageViews: ImageView
+    lateinit var bitMap: Bitmap
     lateinit var memeSelected: String
+    lateinit var bos : ByteArrayOutputStream
     var toptext: EditText?=null
     var bottomtext: EditText?=null
     var ImgUrls: ArrayList<String> = ArrayList()
@@ -36,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     var adapterViewListMeme: ListMemeAdapter?=null
     var recyclerView: RecyclerView? = null
     var bouttonGenerer: Button?=null
+    var shareButton: ImageButton?=null
     var showMemeListButton: Button?=null
     var Manager: LinearLayoutManager? = null
     var adapter: DataAdapter? = null
@@ -148,6 +159,7 @@ class MainActivity : AppCompatActivity() {
         imageViews= findViewById<ImageView>(R.id.card_current_image_view)
         adapterViewListMeme= object : ListMemeAdapter(applicationContext, Listmeme) {
             override fun onItemClick(view: View): Boolean {
+
                 var list : ArrayList<String> = arrayListOf()
                 for ((key, value) in Listmeme){
                     list.add(value)
@@ -155,6 +167,7 @@ class MainActivity : AppCompatActivity() {
                 //val list : ArrayList<String> = Listmeme.values as ArrayList<String>
                 val memeSelected=list.get(recyclerViewListMeme!!.getChildViewHolder(view).adapterPosition)
                 Picasso.with(applicationContext).load(API_URL.format(memeSelected, "TOP", "BOTTOM")).resize(600, 600).into(imageViews)
+
                 bouttonGenerer!!.setOnClickListener{
                     var listurl : ArrayList<String> = arrayListOf()
                     for ((key, value) in Listmeme){
@@ -171,17 +184,37 @@ class MainActivity : AppCompatActivity() {
       //          adapter = DataAdapter(applicationContext,ImgUrls)
         //        recyclerView!!.adapter = adapter
                 recyclerViewListMeme!!.visibility= View.GONE
+
                 return true
                                                         }
             }
         recyclerViewListMeme!!.adapter = adapterViewListMeme
 
+        /*shareButton!!.setOnClickListener {
+            val bitmap = imageViews.drawable
+            //val bitMap : Bitmap =imageViews.getDrawingCache()
+            val bos : ByteArrayOutputStream = ByteArrayOutputStream()
+
+            val directory: File= File(cacheDir,"images")
+            try{
+                directory.mkdir()
+                var file: File = File(directory,"image_partagee.jpg")
+                var outputStream: FileOutputStream= FileOutputStream(file)
+                bitMap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
+                outputStream.flush()
+                outputStream.close()
+                val uri = FileProvider.getUriForFile(applicationContext, "com.example.myapplicationsqd", file);
+            }catch (e:Exception){}
+
+        }*/
 
 
 
         //RecyclerView qui affiche le meme selectionné
 
     }
+
+
 
     private fun jsonParse() {
         val url = "http://os-vps418.infomaniak.ch:1186/i507_1_2/listmeme.json"
