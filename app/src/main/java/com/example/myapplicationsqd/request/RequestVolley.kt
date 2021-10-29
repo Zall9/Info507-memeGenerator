@@ -9,7 +9,6 @@ import com.example.myapplicationsqd.MainActivity
 class RequestVolley {
     companion object JsonParsing{
     fun jsonParse(requestQueue: RequestQueue, Listmeme: HashMap<String,String>) {
-
         val url = "http://os-vps418.infomaniak.ch:1186/i507_1_2/listmeme.json"
         val request = JsonObjectRequest(Request.Method.GET, url, null,
             { response ->

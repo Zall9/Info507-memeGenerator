@@ -10,6 +10,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import com.example.myapplicationsqd.adapter.DataAdapter
 import com.example.myapplicationsqd.adapter.ListMemeAdapter
+import com.example.myapplicationsqd.request.DownloadManager
 import com.example.myapplicationsqd.request.RequestVolley
 import com.squareup.picasso.Picasso
 import kotlin.collections.ArrayList
@@ -59,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 
         showMemeListButton!!.setOnClickListener {
             RequestVolley.jsonParse(requestQueue!!, Listmeme)
-
+            DownloadManager.downloadJson("http://os-vps418.infomaniak.ch:1186/i507_1_2/listmeme.json", applicationContext, this@MainActivity)
             if (recyclerViewListMeme!!.visibility==View.VISIBLE){
                 recyclerViewListMeme!!.visibility= View.GONE
             }

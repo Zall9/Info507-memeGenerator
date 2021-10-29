@@ -7,15 +7,7 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.os.Environment
-import android.widget.Button
-import android.widget.EditText
-import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.android.volley.RequestQueue
-import com.example.myapplicationsqd.adapter.DataAdapter
-import com.example.myapplicationsqd.adapter.ListMemeAdapter
 import java.io.File
 
 class DownloadManager {
@@ -42,7 +34,7 @@ class DownloadManager {
                 directory.mkdirs()
             }
             val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-            //Environment.getStorageDirectory()
+            
             val downloadUri = Uri.parse(url)
 
             val request = DownloadManager.Request(downloadUri).apply {
@@ -53,7 +45,7 @@ class DownloadManager {
                     .setDestinationInExternalPublicDir(
                         directory.toString(),
                         File.separator + "MemeCreator" + File.separator + generateName()
-                        //url.substring(url.lastIndexOf("/") + 1)
+
                     )
             }
 
@@ -93,6 +85,7 @@ class DownloadManager {
             }
             return msg
         }
+
 
     }
 }
