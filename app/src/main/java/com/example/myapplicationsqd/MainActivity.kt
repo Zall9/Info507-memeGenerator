@@ -60,7 +60,6 @@ class MainActivity : AppCompatActivity() {
 
         showMemeListButton!!.setOnClickListener {
             RequestVolley.jsonParse(requestQueue!!, Listmeme)
-            DownloadManager.downloadJson("http://os-vps418.infomaniak.ch:1186/i507_1_2/listmeme.json", applicationContext, this@MainActivity)
             if (recyclerViewListMeme!!.visibility==View.VISIBLE){
                 recyclerViewListMeme!!.visibility= View.GONE
             }
