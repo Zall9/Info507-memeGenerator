@@ -1,162 +1,129 @@
 package com.example.myapplicationsqd
 import android.annotation.SuppressLint
-import android.app.DownloadManager
-import android.content.Context
-import android.database.Cursor
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
+import android.provider.MediaStore
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.graphics.drawable.toBitmap
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import java.util.*
-import java.io.File
-import android.widget.RelativeLayout
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.Volley
+import com.example.myapplicationsqd.adapter.DataAdapter
+import com.example.myapplicationsqd.adapter.ListMemeAdapter
+import com.example.myapplicationsqd.request.DownloadManager
+import com.example.myapplicationsqd.request.RequestVolley
+import com.squareup.picasso.Picasso
+import java.io.ByteArrayOutputStream
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+import android.graphics.drawable.BitmapDrawable
 
-
+import android.R.attr.path
 
 
 
 
 class MainActivity : AppCompatActivity() {
-    var afficherMeme:Boolean=false
-    var textBottom: EditText?=null
-    var textUp: EditText?=null
-    var ImgUrls: ArrayList<String> = ArrayList()
-    var Listmeme: ArrayList<String> = ArrayList()
+    lateinit var imageViews: ImageView
+
+    var toptext: EditText?=null
+    var bottomtext: EditText?=null
+    var Listmeme: HashMap<String,String> = hashMapOf()
     var recyclerViewListMeme: RecyclerView? = null
     var managerViewListMeme: LinearLayoutManager?=null
     var adapterViewListMeme: ListMemeAdapter?=null
-    var recyclerView: RecyclerView? = null
+    var bouttonTelecharger: Button?=null
     var bouttonGenerer: Button?=null
     var showMemeListButton: Button?=null
-    var Manager: LinearLayoutManager? = null
-    var adapter: DataAdapter? = null
-    var msg: String? = ""
-    var lastMsg = ""
-    var list_row_layout: RelativeLayout?=null
-    var showOrHideButton: Button?=null
-    fun generateName() :String{
-        val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
-        val randomString = (1..15)
-            .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
-            .map(charPool::get)
-            .joinToString("");
-        return randomString + ".jpg"
-    }
-    @SuppressLint("Range")
-    fun downloadImage(url: String) {
-        val directory = File(Environment.DIRECTORY_PICTURES)
-        if (!directory.exists()) {
-            directory.mkdirs()
-        }
-        val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        //Environment.getStorageDirectory()
-        val downloadUri = Uri.parse(url)
+    var requestQueue: RequestQueue? = null
+    var shareButton: ImageButton?=null
 
-        val request = DownloadManager.Request(downloadUri).apply {
-            setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
-                .setAllowedOverRoaming(false)
-                .setTitle(url.substring(url.lastIndexOf("/") + 1))
-                .setDescription("")
-                .setDestinationInExternalPublicDir(
-                    directory.toString(),
-                    File.separator + "MemeCreator" + File.separator + generateName()
-                    //url.substring(url.lastIndexOf("/") + 1)
-                )
-        }
 
-        val downloadId = downloadManager.enqueue(request)
-        val query = DownloadManager.Query().setFilterById(downloadId)
-        Thread(Runnable {
-            var downloading = true
-            while (downloading) {
-                val cursor: Cursor = downloadManager.query(query)
-                cursor.moveToFirst()
-                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
-                    downloading = false
-                }
-                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
-                msg = statusMessage(url, directory, status)
-                if (msg != lastMsg) {
-                    this.runOnUiThread {
-                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-
-                    }
-                    lastMsg = msg ?: ""
-                }
-                cursor.close()
-            }
-        }).start()
-    }
-    private fun statusMessage(url: String, directory: File, status: Int): String? {
-        msg = when (status) {
-            DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
-            DownloadManager.STATUS_PAUSED -> "Paused"
-            DownloadManager.STATUS_PENDING -> "Pending"
-            DownloadManager.STATUS_RUNNING -> "Downloading..."
-            DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully in $directory" + File.separator + url.substring(
-                url.lastIndexOf("/") + 1
-            )
-            else -> "There's nothing to download"
-        }
-        return msg
-    }
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
+
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        requestQueue = Volley.newRequestQueue(this)
 
-        bouttonGenerer= findViewById<Button>(R.id.bouttonSent)
+        val API_URL = "http://apimeme.com/meme?meme=%s&top=%s&bottom=%s"
+
+
+        shareButton=findViewById<ImageButton>(R.id.sharebutton)
+        bouttonGenerer= findViewById<Button>(R.id.bouttonGenerate)
+        bouttonTelecharger=findViewById<Button>(R.id.bouttonSent)
         showMemeListButton= findViewById<Button>(R.id.ButtonShowListOfMeme)
-        textUp= findViewById<EditText>(R.id.textUp)
-        textBottom= findViewById<EditText>(R.id.textDown)
+        toptext= findViewById<EditText>(R.id.textUp)
+        bottomtext= findViewById<EditText>(R.id.textDown)
 
-        Listmeme.add("https://apimeme.com/meme?meme=10-Guy&top=Top+text&bottom=Bottom+text")
-        Listmeme.add("https://apimeme.com/meme?meme=1990s-First-World-Problems&top=Top+text&bottom=Bottom+text")
-        var textHaut= textUp!!.text
-        var textBas= textBottom!!.text
+        var textHaut= toptext!!.text
+        var textBas= bottomtext!!.text
 
 
-        ImgUrls.add("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
 
-        bouttonGenerer!!.setOnClickListener{
-            downloadImage("https://apimeme.com/meme?meme=Bonobo-Lyfe&top=${textHaut}&bottom=${textBas}")
-        }
         showMemeListButton!!.setOnClickListener {
+            RequestVolley.jsonParse(requestQueue!!, Listmeme)
             if (recyclerViewListMeme!!.visibility==View.VISIBLE){
                 recyclerViewListMeme!!.visibility= View.GONE
             }
             else
                 recyclerViewListMeme!!.visibility= View.VISIBLE
         }
-        list_row_layout = findViewById<RelativeLayout>(R.id.list_row_layout)
-/*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
-        /*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
-        /*permet d 'effectuer une action lorsque l'on click sur une image*/
-        override fun onCellClickListener() {
-        Toast.makeText(this,"Cell clicked", Toast.LENGTH_SHORT).show()
-        }
-        /*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
-/*SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS*/
         //Reycler View de la liste des memes a selectionner
         recyclerViewListMeme= findViewById<View>(R.id.listOfPictures) as RecyclerView
         managerViewListMeme= LinearLayoutManager(this)
         recyclerViewListMeme!!.layoutManager=managerViewListMeme
-        adapterViewListMeme= ListMemeAdapter(this,Listmeme)
+        imageViews= findViewById<ImageView>(R.id.card_current_image_view)
+        adapterViewListMeme= object : ListMemeAdapter(applicationContext, Listmeme) {
+            override fun onItemClick(view: View): Boolean {
+
+                var list : ArrayList<String> = arrayListOf()
+                for ((key, value) in Listmeme){
+                    list.add(value)
+                }
+
+                val memeSelected=list.get(recyclerViewListMeme!!.getChildViewHolder(view).adapterPosition)
+                Picasso.with(applicationContext).load(API_URL.format(memeSelected, "TOP", "BOTTOM")).resize(600, 600).into(imageViews)
+                bouttonGenerer!!.setOnClickListener {
+                    Picasso.with(applicationContext).load(API_URL.format(memeSelected, textHaut, textBas)).resize(550,600).into(imageViews)
+                }
+                bouttonTelecharger!!.setOnClickListener{
+                    var listurl : ArrayList<String> = arrayListOf()
+                    for ((key, value) in Listmeme){
+                        listurl.add(key)
+                    }
+
+                    com.example.myapplicationsqd.request.DownloadManager.downloadImage(API_URL.format(memeSelected, textHaut, textBas),applicationContext,this@MainActivity)
+                }
+                Toast.makeText(applicationContext, "$memeSelected", Toast.LENGTH_LONG).show()
+                shareButton!!.setOnClickListener{
+                    val bitmap = (imageViews.getDrawable() as BitmapDrawable).bitmap
+                    val intent=Intent()
+                    intent.action=Intent.ACTION_SEND
+                    val path= MediaStore.Images.Media.insertImage(contentResolver,bitmap,"title","null")
+                    val uri=Uri.parse(path)
+                    intent.putExtra(Intent.EXTRA_STREAM, uri)
+                    intent.type="image/*"
+                    startActivity(Intent.createChooser(intent,"Share to"))
+                }
+                recyclerViewListMeme!!.visibility= View.GONE
+
+                return true
+                                                        }
+            }
         recyclerViewListMeme!!.adapter = adapterViewListMeme
 
-        //RecyclerView qui affiche le meme selectionné
-        if (afficherMeme==true){
-            recyclerView = findViewById<View>(R.id.card_current_recycler_view) as RecyclerView
-            Manager = LinearLayoutManager(this)
-            recyclerView!!.layoutManager = Manager
-            adapter = DataAdapter(this,ImgUrls)
-            recyclerView!!.adapter = adapter
-        }
     }
+
+
+
+
 }

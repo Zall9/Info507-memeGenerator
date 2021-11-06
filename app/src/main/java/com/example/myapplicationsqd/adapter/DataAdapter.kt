@@ -1,10 +1,11 @@
-package com.example.myapplicationsqd
+package com.example.myapplicationsqd.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplicationsqd.R
 import com.squareup.picasso.Picasso
 import java.util.*
 

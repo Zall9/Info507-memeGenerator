@@ -10,55 +10,81 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-                <androidx.recyclerview.widget.RecyclerView
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="110dp"
+
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/listOfPictures"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:clickable="true"
-                ></androidx.recyclerview.widget.RecyclerView>
+                android:visibility="gone"></androidx.recyclerview.widget.RecyclerView>
+
             <Button
                 android:id="@+id/ButtonShowListOfMeme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Choose a meme"
-                app:layout_constraintLeft_toRightOf="@id/listOfPictures"
-                android:layout_marginLeft="150dp"></Button>
+                android:theme="@style/Theme.memegenerator"
+                app:layout_constraintLeft_toRightOf="@id/listOfPictures"></Button>
+
         </LinearLayout>
 
+*        <EditText
+            android:id="@+id/textUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Texte en haut de l'image"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="50dp"
+            android:theme="@style/Theme.memegenerator"
+            ></EditText>
 
-    <EditText
-        android:id="@+id/textUp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:hint="Texte en haut de l'image"
-        android:layout_marginLeft="100dp"
-        android:layout_marginTop="50dp"
-        ></EditText>
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/card_current_recycler_view"
-        android:scrollbars="vertical"
-        ></androidx.recyclerview.widget.RecyclerView>
-    <EditText
-        android:id="@+id/textDown"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="100dp"
-        android:hint="Texte en bas de l'image"></EditText>
+        <ImageView
 
+            android:id="@+id/card_current_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="vertical"></ImageView>
+        <EditText
+
+            android:id="@+id/textDown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:theme="@style/Theme.memegenerator"
+            android:hint="Texte en bas de l'image"></EditText>
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
         <Button
-            android:id="@+id/bouttonSent"
+            android:id="@+id/bouttonGenerate"
             android:text="Generate"
             android:layout_width="120dp"
             android:layout_height="45dp"
-            android:layout_marginLeft="135dp"
+            android:layout_marginLeft="75dp"
+            android:theme="@style/Theme.memegenerator"
             ></Button>
+        <Button
+            android:id="@+id/bouttonSent"
+            android:layout_marginLeft="15dp"
+            android:layout_width="120dp"
+            android:layout_height="45dp"
+            android:text="Download"
+            ></Button>
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/sharebutton"
+            android:background="@android:drawable/ic_menu_share"></ImageButton>
     </LinearLayout>
-
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
