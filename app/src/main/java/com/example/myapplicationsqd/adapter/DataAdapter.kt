@@ -9,6 +9,9 @@ import com.example.myapplicationsqd.R
 import com.squareup.picasso.Picasso
 import java.util.*
 
+/*Cette classe servirait à afficher la liste des memes présent dans le dossier crée dans le répertoire PICTURES
+Nous n'avons pas commenté cettes classe car crée à l'image de ListMemeAdapter
+ */
 
 class DataAdapter(
     private val context: Context,

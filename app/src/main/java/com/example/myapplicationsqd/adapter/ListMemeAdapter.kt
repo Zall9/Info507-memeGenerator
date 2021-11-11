@@ -12,6 +12,7 @@ import com.example.myapplicationsqd.R
 import com.squareup.picasso.Picasso
 import kotlin.collections.HashMap
 
+//Classe abstraite pour implémenter onItemClick
 abstract class ListMemeAdapter(
     private val context: Context,
     private val Listmeme: HashMap<String, String>,
@@ -22,7 +23,7 @@ abstract class ListMemeAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.list_row_layout, parent, false)
-        view.setOnClickListener { view -> onItemClick(view) }
+        view.setOnClickListener { view -> onItemClick(view) } //listener sur chaque element du recyclerView
         return ViewHolder(view)
     }
 
@@ -31,26 +32,27 @@ abstract class ListMemeAdapter(
     override fun onBindViewHolder(holder: ViewHolder, i: Int) {
         var list : ArrayList<String> = arrayListOf()
         var list2 : ArrayList<String> = arrayListOf()
+        /*la variable i est la position du i-eme element dans le recyclerView
+            Pour dessiner et afficher le texte correspondant,
+            il faut construire deux tableaux contenant respectivement
+            clés et valeurs car on ne peut itérer sur des hashmap
+        */
         for ((key, value) in Listmeme){
-         list.add(key)
-         list2.add(value)
+         list.add(key)//contient les urls
+         list2.add(value)//contient les titres des memes
         }
         Picasso.with(context).load(API_URL+list2[i]).resize(300, 300).into(holder.img_androidlist)
-        Log.d("TAG", API_URL+list2[i])
+        //on affiche l'image présent a l'url dans list[i] dans notre viewholder
+        //Log.d("TAG", API_URL+list2[i])
         holder.txtAndroid.text = list.get(i).toString()
-
+        //on set le texte de list2[i] dans notre viewholder
     }
 
     override fun getItemCount(): Int {
         return Listmeme.size
     }
-    fun getId(i:Int):String{
-        var list : ArrayList<String> = arrayListOf()
-        for ((key, value) in Listmeme){
-            list.add(key)
-        }
-        return list.get(i)
-    }
+    //Cette classe interne permets de lier a l'initialisation d'un ListMemeAdapter
+        // le TextView ainsi que l'ImageView présents dans list_row_layout
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
         var txtAndroid: TextView
@@ -61,5 +63,4 @@ abstract class ListMemeAdapter(
             img_androidlist= view.findViewById<ImageView>(R.id.img_androidlist)
         }
     }
-
 }

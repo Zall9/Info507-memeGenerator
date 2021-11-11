@@ -11,24 +11,34 @@ import android.widget.Toast
 import java.io.File
 
 class DownloadManager {
+    //Il n'est pas prévu d'instancier cette classe.
+    // On accède à la fonction jsonParse de manière statique
     companion object DownloadAndNameObject{
         var msg: String? = ""
         var lastMsg = ""
         lateinit var context:Context
 
         fun generateName() :String{
-            val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+            //appliquer cette methode à une image génère une chaine aléatoire et
+            //ajoute l'extension .jpg a la fin.
+            //
+            val charPool : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9') //regex :)
             val randomString = (1..15)
                 .map { i -> kotlin.random.Random.nextInt(0, charPool.size) }
                 .map(charPool::get)
-                .joinToString("");
+                .joinToString("");//chaine aléatoire
             println(randomString + ".jpg")
             return randomString + ".jpg"
         }
         @SuppressLint("Range")
         fun downloadImage(url: String, context: Context, activity: Activity) {
+            /*
+            *   url:String -> URL de l'image a télécharger
+            * la méthode télécharge l'image à partir d'une url en utilisant le gestionnaire de téléchargements d'Android
+            *
+            */
             this.context=context
-
+            //crée le repertoire s'il n'existe pas
             val directory = File(Environment.DIRECTORY_PICTURES)
             if (!directory.exists()) {
                 directory.mkdirs()
@@ -45,7 +55,7 @@ class DownloadManager {
                     .setDestinationInExternalPublicDir(
                         directory.toString(),
                         File.separator + "MemeCreator" + File.separator + generateName()
-
+                    //Création du repertoire MemeCreator dans PICTURES + génère un nom pour l'image
                     )
             }
 
@@ -54,6 +64,7 @@ class DownloadManager {
             Thread(Runnable {
                 var downloading = true
                 while (downloading) {
+                    //le curseur permets de determiner si le telechargement est en cours ou terminé
                     val cursor: Cursor = downloadManager.query(query)
                     cursor.moveToFirst()
                     if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
@@ -73,6 +84,7 @@ class DownloadManager {
             }).start()
         }
         private fun statusMessage(url: String, directory: File, status: Int): String? {
+            // affichage de toast statuant l'état du téléchargement à l'utilisateur
             msg = when (status) {
                 DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
                 DownloadManager.STATUS_PAUSED -> "Paused"
